@@ -7,8 +7,11 @@ use raylib_framework_testing::scenes::{Scene, SceneSwitch};
 use std::time::Instant;
 
 fn main() {
-    let width: i32 = 900;
-    let height: i32 = 900;
+    let scale = 4; 
+    let base_width: i32 = 576;
+    let base_height: i32 = 324;
+    let width = scale * base_width;
+    let height = scale * base_height;
     let (mut rl, thread) = raylib::init()
         .size(width, height)
         .title("Raylib Framework Demo")
@@ -16,8 +19,36 @@ fn main() {
 
 
 
-    // create the game data. This prepresents data associated with the human player.
-    let mut game_data = GameData::new(width, height);
+    // load in all the walking_textures
+
+    let walk_tex_1: Texture2D = rl.load_texture(&thread, "./resources/2_WALK_000.png").unwrap();
+    let walk_tex_2: Texture2D = rl.load_texture(&thread, "./resources/2_WALK_001.png").unwrap();
+    let walk_tex_3: Texture2D = rl.load_texture(&thread, "./resources/2_WALK_002.png").unwrap();
+    let walk_tex_4: Texture2D = rl.load_texture(&thread, "./resources/2_WALK_003.png").unwrap();
+    let walk_tex_5: Texture2D = rl.load_texture(&thread, "./resources/2_WALK_004.png").unwrap();
+    
+    let walk_vec: Vec<Texture2D> = vec![walk_tex_1, walk_tex_2, walk_tex_3, walk_tex_4, walk_tex_5];
+
+    // load in all the running_textures 
+
+    
+    // load in all the idle_textures
+
+    // load in background textures
+
+    let background_tex_1: Texture2D = rl.load_texture(&thread, "./resources/background 1.png").unwrap();
+    let background_vec: Vec<Texture2D> = vec![background_tex_1];
+
+    // load in platformers
+
+    let obstacle_1_tex: Texture2D = rl.load_texture(&thread, "./resources/tile1.png").unwrap();
+    let obstacle_2_tex: Texture2D = rl.load_texture(&thread, "./resources/tile2.png").unwrap();
+    let obstacle_3_tex: Texture2D = rl.load_texture(&thread, "./resources/tile3.png").unwrap();
+
+    let obstacle_vec: Vec<Texture2D> = vec![obstacle_1_tex, obstacle_2_tex, obstacle_3_tex];
+
+     // create the game data. This prepresents data associated with the human player.
+    let mut game_data = GameData::new(width, height, walk_vec,background_vec, obstacle_vec);
 
     // store scenes in a Vec. Box<dyn Scene> means a pointer to any type that implements the Scene trait.
     let mut scenes: Vec<Box<dyn Scene>> = vec![Box::new(MenuScene)];
