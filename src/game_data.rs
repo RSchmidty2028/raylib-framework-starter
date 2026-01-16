@@ -1,9 +1,6 @@
-//! The data for each game session. 
-//! 
-//! You could also store data associated with each human player here.
-//! We could also store the player's gamepad_id here.
+//! Global state for the current game session.
 
-use raylib::ffi::Vector2;
+// Removed unused import (Vector2) to stop compiler warnings
 
 pub struct GameData {
     pub points: u32,
@@ -20,7 +17,7 @@ impl GameData {
         }
     }
 
-    /// add one to the player's total points.
+    // simple score increment
     pub fn score(&mut self) {
         self.points += 1;
     }

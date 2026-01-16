@@ -257,14 +257,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "raylib-framework-testing"
-version = "0.1.0"
-dependencies = [
- "rand",
- "raylib",
-]
-
-[[package]]
 name = "raylib-sys"
 version = "5.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -379,6 +371,14 @@ name = "wit-bindgen"
 version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f17a85883d4e6d00e8a97c586de764dabcc06133f7f1d55dce5cdc070ad7fe59"
+
+[[package]]
+name = "wizards_1v1"
+version = "0.1.0"
+dependencies = [
+ "rand",
+ "raylib",
+]
 
 [[package]]
 name = "zerocopy"
