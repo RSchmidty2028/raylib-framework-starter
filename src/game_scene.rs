@@ -34,7 +34,7 @@ impl GameScene {
             gravity: 300.0,
             players: vec![
                 Player::new(0,300.0, (height - 15) as f32), //player 1
-                Player::new(1,900.0, (height - 15) as f32) //player 2
+                Player::new(1,900.0, (height - 15) as f32)  //player 2
             ],
             // player_1_grounded: true,
             // player_1_velo: Vector2::zero(),
@@ -73,7 +73,7 @@ impl Scene for GameScene {
             if _rl.is_gamepad_available(player.input_id) {
                 // move
                 let axis_x = _rl.get_gamepad_axis_movement(player.input_id, GamepadAxis::GAMEPAD_AXIS_LEFT_X);
-                if axis_x.abs() > 0.1 { direction = axis_x; player.facing_left == true ; }
+                if axis_x.abs() > 0.1 { direction = axis_x; player.facing_left = true ; }
 
 
                 // jump
@@ -113,8 +113,8 @@ impl Scene for GameScene {
             
             // keyboard input (player 2)
             if player.input_id == 1 {
-                 if _rl.is_key_down(KeyboardKey::KEY_LEFT) { direction = -1.0; }
-                 if _rl.is_key_down(KeyboardKey::KEY_RIGHT) { direction = 1.0; }
+                 if _rl.is_key_down(KeyboardKey::KEY_LEFT) { direction = -1.0; player.facing_left = true;}
+                 if _rl.is_key_down(KeyboardKey::KEY_RIGHT) { direction = 1.0; player.facing_left = false; }
                  if player.grounded && (_rl.is_key_pressed(KeyboardKey::KEY_UP) || _rl.is_key_pressed(KeyboardKey::KEY_RIGHT_CONTROL)) {
                      player.vel.y = -550.0;
                      player.grounded = false;
@@ -173,14 +173,14 @@ impl Scene for GameScene {
             }
         }
         for player in &mut self.players {
-             let player_1_moving = player.vel.x != 0.0;
-                     if player_1_moving {
+             let player_moving = player.vel.x != 0.0;
+                     if player_moving {
                         self.walk_timing += dt;
                         self.frame_time = 0.1;
 
                     if self.walk_timing >= self.frame_time {
                         self.walk_timing = 0.0;
-                        self.walk_frame = (self.walk_frame + 1) % _data.player_walk_tex.len();
+                        self.walk_frame = (self.walk_frame + 1) % _data.player1_run_tex.len();
             }
         } 
         }
@@ -195,8 +195,8 @@ impl Scene for GameScene {
             player.pos.x += player.vel.x * dt;
             player.pos.y += player.vel.y * dt;
 
-            if player.pos.y > floor_y as f32{
-                player.pos.y = floor_y as f32;
+            if player.pos.y > (floor_y -5) as f32{
+                player.pos.y = (floor_y -5) as f32;
                 player.vel.y = 0.0;
                 player.grounded = true;
             }
@@ -246,9 +246,24 @@ impl Scene for GameScene {
         else {
             r1 = Rectangle::new(0.0,0.0,419.0,380.0);
         }
+
+        
         let r2 = Rectangle::new(self.players[0].pos.x as f32, self.players[0].pos.y as f32, 128.0, 128.0);
-        let origin = Vector2::new(64.0, 110.0);
-        d.draw_texture_pro(&data.player_walk_tex[self.walk_frame], r1, r2, origin, 0.0, Color::WHITE);
+        let origin = Vector2::new(64.0, 120.0);
+        d.draw_texture_pro(&data.player1_run_tex[self.walk_frame], r1, r2, origin, 0.0, Color::WHITE);
+
+        let p2_source;
+
+        if self.players[1].facing_left {
+            p2_source = Rectangle::new(0.0, 0.0, -419.0, 400.0);
+        }
+        else {
+            p2_source = Rectangle::new(0.0, 0.0, 419.0, 400.0);
+        }
+        let p2_dest = Rectangle::new(self.players[1].pos.x as f32, self.players[1].pos.y as f32, 128.0, 128.0);
+        let p2_origin = Vector2::new(64.0, 120.0);
+        d.draw_texture_pro(&data.player2_run_tex[self.walk_frame], p2_source,p2_dest,p2_origin, 0.0, Color::WHITE);
+            
         
         let ob_1_source = Rectangle::new(0.0, 0.0, 64.0,64.0);
         let ob_1_destination = Rectangle::new(500.0, 800.0, 128.0, 128.0);
